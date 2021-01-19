@@ -39,8 +39,8 @@ public class DrawImages extends JPanel {
     @Override
     public void paint(Graphics comp) {
         super.paintComponent(comp);
-        comp.drawImage(BottomBar, 0, 930, this);
-        comp.drawImage(Ammo[(AmmoRemaining)-1], 1750, 917, 140, 140, this);
+        comp.drawImage(BottomBar, 0, 920, this);
+        comp.drawImage(Ammo[(AmmoRemaining)-1], 1750, 908, 140, 140, this);
 
     }
 
