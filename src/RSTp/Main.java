@@ -9,17 +9,18 @@ import java.util.concurrent.TimeUnit;
 public class Main extends JPanel implements MouseListener {
 
 	static Cursor cross_cursor;
-	static int bullets = 1;
+
+	static JPanel glass = new JPanel(new GridLayout(0, 1));
 	
-	//-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-	//-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-	//-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+	// -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+	// -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+	// -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-	static DrawImages draw=new DrawImages(bullets); // This line is the problem, it creates the object with bullets and then bullets doesnt change so the number is always 1
-	//-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-	//-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-	//-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-
+	static DrawImages draw = new DrawImages(); // This line is the problem, it creates the object with bullets
+														// and then bullets doesnt change so the number is always 1
+	// -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+	// -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+	// -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 	public static void main(String[] args) {
 		JPanel container = new JPanel();
@@ -37,40 +38,37 @@ public class Main extends JPanel implements MouseListener {
 		cross_cursor = toolkit.createCustomCursor(imageCrossCursor, new Point(14, 14), "Cross cursor");
 		contentPane.setCursor(cross_cursor);
 
-		JPanel overlay = new JPanel();
+		final JPanel overlay = new JPanel();
 		overlay.add(draw);
 		overlay.setCursor(cross_cursor);
 		overlay.setOpaque(false);
-
+		overlay.setBackground(Color.black);
+		
 		container.add(overlay);
 		container.add(contentPane);
+	
+
 
 		frame.add(container);
 
-		frame.validate();
-		frame.repaint();
-
-		frame.addMouseListener(new MouseAdapter() {
+		overlay.addMouseListener(new MouseAdapter() {
 
 			public void mouseClicked(MouseEvent e) {
-				bullets = (bullets + 1);
-				draw.repaint();
-				if (bullets == 6) {
+				//DrawImages.DrawImages(bullets);
+				int delay = 2000; //milliseconds
+				
+				draw.shoot();
+				frame.repaint();
+				
 					ActionListener taskPerformer = new ActionListener() {
 						public void actionPerformed(ActionEvent evt) {
-							draw.repaint();
-							bullets = 1;
-							
+							frame.repaint();
 						}
 					};
-					try {
-						TimeUnit.SECONDS.sleep(2);
-						new DrawImages(bullets).repaint();
-					} catch (InterruptedException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
-					}
-				}
+					Timer timer = new Timer(delay, taskPerformer);
+					timer.start();
+					timer.setRepeats(false);
+				
 
 			}
 		});
