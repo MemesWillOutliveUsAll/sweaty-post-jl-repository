@@ -37,7 +37,7 @@ public class StatusBar extends JPanel {
     	}
     	else if(AmmoRemaining <= 0)
     	{
-    		int delay = 3000; //milliseconds
+    		int delay = 2000; //milliseconds
 			ActionListener taskPerformer = new ActionListener() {
 			      public void actionPerformed(ActionEvent evt) {
 			    	  AmmoRemaining = 6;
