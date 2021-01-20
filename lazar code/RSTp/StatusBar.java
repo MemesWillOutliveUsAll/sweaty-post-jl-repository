@@ -11,12 +11,13 @@ import javax.swing.JPanel;
 import javax.swing.Timer;
 
 public class StatusBar extends JPanel {
-    Image BottomBar;
-    Image[] Ammo = new Image[8];
-    Image[] Health = new Image[11];
-    Image[] Damage = new Image[11];
+	Image BottomBar, Saloon;
+	Image[] Ammo = new Image[8];
+	Image[] Health = new Image[11];
+	Image[] Damage = new Image[11];
+	Image[] Gangster = new Image[5];
     Thread runner;
-    int AmmoRemaining = 6;
+    int AmmoRemaining = 6, HealthRemaining=1;
     
     @Override
     public Dimension getMinimumSize() {
@@ -54,9 +55,17 @@ public class StatusBar extends JPanel {
         AmmoRemaining=AmmoLeft;
         Toolkit kit = Toolkit.getDefaultToolkit();
         BottomBar = kit.getImage("Images/BottomBar.png");
+        Saloon = kit.getImage("Images/saloon.jpg");
         for (int i = 0; i < 7; i++) {
             Ammo[i] = kit.getImage("Images/Ammo " + (i) + ".png");
         }
+        
+        for (int i = 0; i < 5; i++) {
+			Gangster[i] = kit.getImage("Images/Gangster " + (i + 1) + ".png");
+		}
+		for (int i = 0; i < 11; i++) {
+			Health[i] = kit.getImage("Images/Health " + (i + 1) + ".png");
+		}
 
 
     }
@@ -64,8 +73,16 @@ public class StatusBar extends JPanel {
     @Override
     public void paint(Graphics comp) {
         super.paintComponent(comp);
+        comp.drawImage(Saloon, 0, 0, this);
         comp.drawImage(BottomBar, 0, 930, this);
         comp.drawImage(Ammo[(AmmoRemaining)], 1750, 917, 140, 140, this);
+        comp.drawImage(Health[(HealthRemaining) - 1], 5, 860, 500, 222, this);
+		comp.drawImage(Damage[(HealthRemaining) - 1], 900, 860, 500, 222, this);
+		comp.drawImage(Gangster[0], 1000, 547, 150, 150, this);
+		comp.drawImage(Gangster[1], 750, 530, this);
+		comp.drawImage(Gangster[2], 0, 0, this);
+		comp.drawImage(Gangster[3], 0, 0, this);
+		comp.drawImage(Gangster[4], 0, 0, this);
 
     }
 
