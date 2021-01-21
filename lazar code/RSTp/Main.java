@@ -19,6 +19,7 @@ public class Main extends JPanel implements MouseListener {
 	static Cursor cross_cursor;
 	static int bullets = 6;
 	
+	
 	//-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 	//-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 	//-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -26,7 +27,8 @@ public class Main extends JPanel implements MouseListener {
 	//-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 	//-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 	//-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-	public static void main(String[] args) throws UnsupportedAudioFileException, IOException, LineUnavailableException {
+	public static void main(String[] args) {
+		JLabel gangster1;
 		//DrawImages draw = new DrawImages(bullets);
 		JPanel container = new JPanel();
 		final JFrame frame = new JFrame("RST");
@@ -42,22 +44,41 @@ public class Main extends JPanel implements MouseListener {
 		Image imageCrossCursor = toolkit.getImage("Images/20083.png");
 		cross_cursor = toolkit.createCustomCursor(imageCrossCursor, new Point(14, 14), "Cross cursor");
 		contentPane.setCursor(cross_cursor);
-		JPanel overlay = new JPanel();
-		overlay.add(statusBar);
-		overlay.setCursor(cross_cursor);
-		overlay.setOpaque(false);
-		
-		//sound
 		
 		//
+		gangster1 = new JLabel(new ImageIcon( "Gangster 1.png"));
+		gangster1.setAlignmentX(JLabel.LEFT_ALIGNMENT);
+		gangster1.setBorder(BorderFactory.createEmptyBorder(0,0,60,0));
+		JPanel overlay = new JPanel();
+		overlay.add(statusBar);
+		
+		overlay.setCursor(cross_cursor);
+		overlay.setOpaque(false);
 
+		container.add(gangster1);
 		container.add(overlay);
 		container.add(contentPane);
-
+		
+		
+		frame.pack();
 		frame.add(container);
-
 		frame.validate();
 		frame.repaint();
+		
+		
+		gangster1.addMouseListener(new MouseAdapter() {
+
+			public void mouseClicked(MouseEvent e) {
+				try {
+					playGunSound();
+				} catch (UnsupportedAudioFileException | IOException
+						| LineUnavailableException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+			}
+		});
+		
 
 		frame.addMouseListener(new MouseAdapter() {
 
@@ -69,11 +90,12 @@ public class Main extends JPanel implements MouseListener {
 					bullets--;
 					try {
 						playGunSound();
-					} catch (UnsupportedAudioFileException | IOException
-							| LineUnavailableException e1) {
+					} 
+					catch (UnsupportedAudioFileException | IOException | LineUnavailableException e1) 
+					{
 						// TODO Auto-generated catch block
 						e1.printStackTrace();
-					}
+					} 
 				}
 				
 				statusBar.shoot();
@@ -100,7 +122,10 @@ public class Main extends JPanel implements MouseListener {
 
 			}
 		});
-
+		
+		
+		
+		
 		SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
 				frame.setVisible(true);
