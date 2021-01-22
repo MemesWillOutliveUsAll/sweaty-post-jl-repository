@@ -14,21 +14,26 @@ import java.io.*;
 import java.net.URL;
 import java.util.concurrent.TimeUnit;
 
-public class Main extends JPanel implements MouseListener {
-	private static Clip clip;
-	static Cursor cross_cursor;
-	static int bullets = 6;
+public class Main {//extends JPanel implements MouseListener {
+	private  Clip clip;
+	Cursor cross_cursor;
+	int bullets = 6;
 	
 	
 	//-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 	//-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 	//-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-	static StatusBar statusBar = new StatusBar(bullets); // This line is the problem, it creates the object with bullets and then bullets doesnt change so the number is always 1
+	StatusBar statusBar = new StatusBar(bullets);
 	//-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 	//-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 	//-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 	public static void main(String[] args) {
-		JLabel gangster1;
+		Main newMain = new Main();
+		newMain.initialize();
+	}
+	
+	public void initialize()
+	{
 		//DrawImages draw = new DrawImages(bullets);
 		JPanel container = new JPanel();
 		final JFrame frame = new JFrame("RST");
@@ -45,40 +50,19 @@ public class Main extends JPanel implements MouseListener {
 		cross_cursor = toolkit.createCustomCursor(imageCrossCursor, new Point(14, 14), "Cross cursor");
 		contentPane.setCursor(cross_cursor);
 		
-		//
-		gangster1 = new JLabel(new ImageIcon( "Gangster 1.png"));
-		gangster1.setAlignmentX(JLabel.LEFT_ALIGNMENT);
-		gangster1.setBorder(BorderFactory.createEmptyBorder(0,0,60,0));
 		JPanel overlay = new JPanel();
+		
 		overlay.add(statusBar);
 		
 		overlay.setCursor(cross_cursor);
 		overlay.setOpaque(false);
 
-		container.add(gangster1);
 		container.add(overlay);
 		container.add(contentPane);
-		
-		
-		frame.pack();
+
 		frame.add(container);
 		frame.validate();
 		frame.repaint();
-		
-		
-		gangster1.addMouseListener(new MouseAdapter() {
-
-			public void mouseClicked(MouseEvent e) {
-				try {
-					playGunSound();
-				} catch (UnsupportedAudioFileException | IOException
-						| LineUnavailableException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
-			}
-		});
-		
 
 		frame.addMouseListener(new MouseAdapter() {
 
@@ -87,6 +71,7 @@ public class Main extends JPanel implements MouseListener {
 				int delay = 2000; //milliseconds
 				if(bullets != 0)
 				{
+					
 					bullets--;
 					try {
 						playGunSound();
@@ -95,7 +80,7 @@ public class Main extends JPanel implements MouseListener {
 					{
 						// TODO Auto-generated catch block
 						e1.printStackTrace();
-					} 
+					}
 				}
 				
 				statusBar.shoot();
@@ -122,16 +107,15 @@ public class Main extends JPanel implements MouseListener {
 
 			}
 		});
-		
-		
-		
-		
+
 		SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
 				frame.setVisible(true);
 			}
 		});
 	}
+	
+	
 	
 	public static void playGunSound() throws UnsupportedAudioFileException, IOException, LineUnavailableException
 	{
@@ -152,7 +136,7 @@ public class Main extends JPanel implements MouseListener {
 		clip.open(audioStream);
 		clip.start();
 	}
-
+/*
 	@Override
 	public void mouseEntered(MouseEvent arg0) {
 		// TODO Auto-generated method stub
@@ -181,4 +165,5 @@ public class Main extends JPanel implements MouseListener {
 		// TODO Auto-generated method stub
 
 	}
+	*/
 }
