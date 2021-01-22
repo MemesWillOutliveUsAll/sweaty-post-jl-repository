@@ -14,7 +14,7 @@ import java.io.*;
 import java.net.URL;
 import java.util.concurrent.TimeUnit;
 
-public class Main {//extends JPanel implements MouseListener {
+public class Main extends JPanel implements MouseListener {
 	private  Clip clip;
 	Cursor cross_cursor;
 	int bullets = 6;
@@ -34,6 +34,10 @@ public class Main {//extends JPanel implements MouseListener {
 	
 	public void initialize()
 	{
+		JLabel gangster1;
+		gangster1 = new JLabel(new ImageIcon( "Images/Gangster 1.png"));
+		gangster1.setBorder(BorderFactory.createEmptyBorder(0,10,0,0));
+		gangster1.addMouseListener(this);
 		//DrawImages draw = new DrawImages(bullets);
 		JPanel container = new JPanel();
 		final JFrame frame = new JFrame("RST");
@@ -52,6 +56,7 @@ public class Main {//extends JPanel implements MouseListener {
 		
 		JPanel overlay = new JPanel();
 		
+		overlay.add(gangster1);
 		overlay.add(statusBar);
 		
 		overlay.setCursor(cross_cursor);
@@ -136,7 +141,7 @@ public class Main {//extends JPanel implements MouseListener {
 		clip.open(audioStream);
 		clip.start();
 	}
-/*
+
 	@Override
 	public void mouseEntered(MouseEvent arg0) {
 		// TODO Auto-generated method stub
@@ -151,7 +156,13 @@ public class Main {//extends JPanel implements MouseListener {
 
 	@Override
 	public void mousePressed(MouseEvent arg0) {
-
+		try {
+			reloadGun();
+		} catch (UnsupportedAudioFileException | IOException
+				| LineUnavailableException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 	}
 
 	@Override
@@ -165,5 +176,5 @@ public class Main {//extends JPanel implements MouseListener {
 		// TODO Auto-generated method stub
 
 	}
-	*/
+	
 }
