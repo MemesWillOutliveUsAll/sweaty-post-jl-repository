@@ -1,21 +1,18 @@
 package RSTp;
 
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.event.*;
 import java.awt.image.*;
-import javax.swing.Timer;
-import javax.swing.JPanel;
+import javax.swing.*;
 
-public class DrawImages extends JPanel implements ActionListener{
+public class DrawImages extends JPanel implements ActionListener {
+
 	Image BottomBar, Saloon;
 	Image[] Ammo = new Image[7];
 	Image[] Health = new Image[11];
-	Image[] Damage = new Image[11];
 	Image[] Gangster = new Image[5];
 	Thread runner;
-	int AmmoRemaining=1, HealthRemaining=1;
-	
+	int AmmoRemaining = 6, HealthRemaining = 1;
 
 	@Override
 	public Dimension getMinimumSize() {
@@ -26,40 +23,19 @@ public class DrawImages extends JPanel implements ActionListener{
 	public Dimension getPreferredSize() {
 		return new Dimension(1920, 1080);
 	}
-	
-	
-	public void shoot() {
-    	if(AmmoRemaining < 7)
-    	{
-    		AmmoRemaining++;
-    	}
-    	else if(AmmoRemaining == 6)
-    	{
-    		int delay = 2000; //milliseconds
-			ActionListener taskPerformer = new ActionListener() {
-			      public void actionPerformed(ActionEvent evt) {
-			    	  AmmoRemaining = 1;
 
-			     }
+	static int mouseX = 0;
+	static int mouseY = 0;
 
-			 };
-
-			 Timer timer = new Timer(delay, taskPerformer);
-			 timer.start();
-			 timer.setRepeats(false);
-
-    	}
-    	
-    }
-	
-
-	public DrawImages() {
+	public DrawImages(int AmmoLeft) {
 		super();
+
+		AmmoRemaining = AmmoLeft;
 		Toolkit kit = Toolkit.getDefaultToolkit();
 		BottomBar = kit.getImage("Images/BottomBar.png");
 		Saloon = kit.getImage("Images/saloon.jpg");
 		for (int i = 0; i < 7; i++) {
-			Ammo[i] = kit.getImage("Images/Ammo " + (i + 1) + ".png");
+			Ammo[i] = kit.getImage("Images/Ammo " + (i) + ".png");
 		}
 		for (int i = 0; i < 5; i++) {
 			Gangster[i] = kit.getImage("Images/Gangster " + (i + 1) + ".png");
@@ -67,31 +43,128 @@ public class DrawImages extends JPanel implements ActionListener{
 		for (int i = 0; i < 11; i++) {
 			Health[i] = kit.getImage("Images/Health " + (i + 1) + ".png");
 		}
-		for (int i = 0; i < 11; i++) {
-			Damage[i] = kit.getImage("Images/face " + (i + 1) + ".png");
+
+	}
+
+	public void shoot() {
+		mouseX = Main.mouseX;
+		mouseY = Main.mouseY;
+		if (AmmoRemaining > 0) {
+			AmmoRemaining--;
+
+		} else if (AmmoRemaining <= 0) {
+			int delay = 2000; // milliseconds
+			repaint();
+			ActionListener taskPerformer = new ActionListener() {
+				public void actionPerformed(ActionEvent evt) {
+					AmmoRemaining = 6;
+					String eventName = evt.getActionCommand();
+
+				}
+
+			};
+
+			Timer timer = new Timer(delay, taskPerformer);
+			timer.start();
+			timer.setRepeats(false);
+
 		}
-		
+
+	}
+
+	// The variable that determines when there will be a map switch
+	int TotalGangstersShot = 0;
+
+	int[] GangsterWidth = { 750, 1000, 1200 };
+	int[] GangsterHeight = { 530, 547, 547 };
+	int[] GangsterImgSize = { 288, 150, 150 };
+	int ActiveGangster1 = 0, ActiveGangster2 = 1, ActiveGangster3 = 2;
+	int RandomPos1, RandomPos2, RandomPos3;
+
+	int[][] PossiblePos = { { 750, 530, 288 }, { 1000, 547, 150 }, { 1200, 547, 150 }, { 850, 0, 288 },
+			{ 1500, 0, 288 }, { 300, 500, 288 }, { 1500, 500, 288 } };
+
+	public void wasShot() {
+	
+		for (int i = 0; i < 3; i++) {
+	
+			if (mouseX > GangsterWidth[i] && mouseX < ( GangsterWidth[i] + GangsterImgSize[i]) && mouseY < GangsterHeight[i] && mouseY < ( GangsterHeight[i] + GangsterImgSize[i])) {
+				
+
+				GangsterShot(i);
+			}
+
+		}
+	}
+
+	public void GangsterShot(int whoGotShot) {
+
+		// After Gangster got shot picks a random gangster to respawn
+		if (whoGotShot == ActiveGangster1) {
+
+			TotalGangstersShot++;
+
+			// Placing new guy back
+			do {
+				RandomPos1 = (int) (Math.random() * (6 - 0 + 1));
+			} while (ActiveGangster2 == RandomPos1 || ActiveGangster3 == RandomPos1);
+			ActiveGangster1 = (RandomPos1 - 1);
+
+			GangsterWidth[0] = PossiblePos[(RandomPos1)][0];
+			GangsterHeight[0] = PossiblePos[(RandomPos1)][1];
+			GangsterImgSize[0] = PossiblePos[(RandomPos1)][2];
+			repaint();
+
+		} else if (whoGotShot == ActiveGangster2) {
+			TotalGangstersShot++;
+
+			// Placing new guy back
+
+			do {
+				RandomPos2 = (int) (Math.random() * (6 - 0 + 1));
+			} while (ActiveGangster1 == RandomPos2 || ActiveGangster3 == RandomPos2);
+
+			ActiveGangster2 = (RandomPos2 - 1);
+			GangsterWidth[1] = PossiblePos[(RandomPos2)][0];
+			GangsterHeight[1] = PossiblePos[(RandomPos2)][1];
+			GangsterImgSize[1] = PossiblePos[(RandomPos2)][2];
+			repaint();
+
+		} else if (whoGotShot == ActiveGangster3) {
+
+			TotalGangstersShot++;
+
+			// Placing new guy back
+
+			do {
+				RandomPos3 = (int) (Math.random() * (6 - 0 + 1));
+			} while (ActiveGangster1 == RandomPos3 || ActiveGangster1 == RandomPos3);
+
+			ActiveGangster3 = (RandomPos3 - 1);
+			GangsterWidth[2] = PossiblePos[(RandomPos3)][0];
+			GangsterHeight[2] = PossiblePos[(RandomPos3)][1];
+			GangsterImgSize[2] = PossiblePos[(RandomPos3)][2];
+			repaint();
+		}
+
 	}
 
 	@Override
-	public void paint(Graphics comp) {
+	public void paintComponent(Graphics comp) {
 		super.paintComponent(comp);
 		comp.drawImage(Saloon, 0, 0, this);
 		comp.drawImage(BottomBar, 0, 920, this);
-		comp.drawImage(Ammo[(AmmoRemaining) - 1], 1750, 908, 140, 140, this);
+		comp.drawImage(Ammo[AmmoRemaining], 1750, 908, 140, 140, this);
 		comp.drawImage(Health[(HealthRemaining) - 1], 5, 860, 500, 222, this);
-		comp.drawImage(Damage[(HealthRemaining) - 1], 900, 860, 500, 222, this);
-		comp.drawImage(Gangster[0], 1000, 547, 150, 150, this);
-		comp.drawImage(Gangster[1], 750, 530, this);
-		comp.drawImage(Gangster[2], 0, 0, this);
-		comp.drawImage(Gangster[3], 0, 0, this);
-		comp.drawImage(Gangster[4], 0, 0, this);
+		comp.drawImage(Gangster[0], GangsterWidth[0], GangsterHeight[0], GangsterImgSize[0], GangsterImgSize[0], this);
+		comp.drawImage(Gangster[1], GangsterWidth[1], GangsterHeight[1], GangsterImgSize[1], GangsterImgSize[1], this);
+		comp.drawImage(Gangster[2], GangsterWidth[2], GangsterHeight[2], GangsterImgSize[2], GangsterImgSize[2], this);
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 }

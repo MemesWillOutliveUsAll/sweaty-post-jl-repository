@@ -1,30 +1,35 @@
 package RSTp;
 
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
+import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.UnsupportedAudioFileException;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
 public class Main extends JPanel implements MouseListener {
 
 	static Cursor cross_cursor;
-
-	static JPanel glass = new JPanel(new GridLayout(0, 1));
+	static int bullets = 6;
 	
-	// -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-	// -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-	// -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+	static int mouseX=0;
+	static int mouseY=0;
+	
+	static DrawImages draw = new DrawImages(bullets);
+	
+	
 
-	static DrawImages draw = new DrawImages(); // This line is the problem, it creates the object with bullets
-														// and then bullets doesnt change so the number is always 1
-	// -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-	// -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-	// -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+	public final static JFrame frame = new JFrame("RST");
 
 	public static void main(String[] args) {
 		JPanel container = new JPanel();
-		final JFrame frame = new JFrame("RST");
+
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setSize(1920, 1080);
 
@@ -43,32 +48,60 @@ public class Main extends JPanel implements MouseListener {
 		overlay.setCursor(cross_cursor);
 		overlay.setOpaque(false);
 		overlay.setBackground(Color.black);
-		
+
 		container.add(overlay);
 		container.add(contentPane);
-	
-
 
 		frame.add(container);
 
-		overlay.addMouseListener(new MouseAdapter() {
+		frame.addMouseListener(new MouseAdapter() {
 
+			
+			
 			public void mouseClicked(MouseEvent e) {
-				//DrawImages.DrawImages(bullets);
-				int delay = 2000; //milliseconds
-				
+				if (bullets == 6) {
+					stopMultipleReloads = 0;
+				}
+				// DrawImages.DrawImages(bullets);
+				int delay = 1000; // milliseconds
+				if (bullets >= 1) {
+					if (draw.AmmoRemaining == bullets) {
+						mouseX = e.getX();
+						mouseY = e.getY();
+						bullets--;
+						draw.wasShot(); 
+						frame.repaint();
+						try {
+							playGunSound();
+						} catch (UnsupportedAudioFileException | IOException | LineUnavailableException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						}
+					}
+				}
+
 				draw.shoot();
 				frame.repaint();
-				
+				if (bullets == 0) {
+
 					ActionListener taskPerformer = new ActionListener() {
 						public void actionPerformed(ActionEvent evt) {
 							frame.repaint();
+							bullets = 6;
+							try {
+								reloadGun();
+							} catch (UnsupportedAudioFileException | IOException | LineUnavailableException e1) {
+								// TODO Auto-generated catch block
+								e1.printStackTrace();
+							}
 						}
 					};
 					Timer timer = new Timer(delay, taskPerformer);
 					timer.start();
 					timer.setRepeats(false);
-				
+
+					frame.repaint();
+				}
 
 			}
 		});
@@ -78,6 +111,31 @@ public class Main extends JPanel implements MouseListener {
 				frame.setVisible(true);
 			}
 		});
+	}
+
+	static int stopMultipleReloads = 0;
+
+	public static void playGunSound() throws UnsupportedAudioFileException, IOException, LineUnavailableException {
+		File soundFile = new File("Images//Gunshot.wav");
+		Clip clip;
+		AudioInputStream audioStream = AudioSystem.getAudioInputStream(soundFile);
+		clip = AudioSystem.getClip();
+		clip.open(audioStream);
+		clip.start();
+
+	}
+
+	public static void reloadGun() throws UnsupportedAudioFileException, IOException, LineUnavailableException {
+		File soundFile = new File("Images//reload.wav");
+		Clip clip;
+		AudioInputStream audioStream = AudioSystem.getAudioInputStream(soundFile);
+		clip = AudioSystem.getClip();
+		clip.open(audioStream);
+		if (stopMultipleReloads == 0) {
+			clip.start();
+		}
+		stopMultipleReloads = 1;
+		frame.repaint();
 	}
 
 	@Override
