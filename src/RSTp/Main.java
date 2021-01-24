@@ -96,6 +96,7 @@ public class Main extends JPanel implements MouseListener {
 							}
 						}
 					};
+					frame.repaint();
 					Timer timer = new Timer(delay, taskPerformer);
 					timer.start();
 					timer.setRepeats(false);

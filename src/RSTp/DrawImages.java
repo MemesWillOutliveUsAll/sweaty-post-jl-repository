@@ -49,6 +49,8 @@ public class DrawImages extends JPanel implements ActionListener {
 	public void shoot() {
 		mouseX = Main.mouseX;
 		mouseY = Main.mouseY;
+		wasShot(); 
+		repaint();
 		if (AmmoRemaining > 0) {
 			AmmoRemaining--;
 
@@ -162,6 +164,7 @@ public class DrawImages extends JPanel implements ActionListener {
 			GangsterImgSize[2] = PossiblePos[(RandomPos3)][2];
 			repaint();
 		}
+		repaint();
 
 	}
 
