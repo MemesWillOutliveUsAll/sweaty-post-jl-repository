@@ -155,8 +155,8 @@ public class DrawImages extends JPanel implements ActionListener {
 	int HeadshotWidth = -1000;
 
 	public void Headshot() {
-		HeadshotWidth = 800;
-
+		HeadshotWidth = 930;
+		
 	}
 
 	public void GangsterShot(int whoGotShot) {
@@ -169,7 +169,7 @@ public class DrawImages extends JPanel implements ActionListener {
 			// Placing new guy back
 			do {
 				RandomPos1 = (int) (Math.random() * (6 - 0 + 1));
-			} while ( ActiveGangster2 == RandomPos3 || ActiveGangster3 == RandomPos3);
+			} while ( ActiveGangster2 == RandomPos1 || ActiveGangster3 == RandomPos1);
 
 			ActiveGangster1 = (RandomPos1);
 
@@ -186,7 +186,7 @@ public class DrawImages extends JPanel implements ActionListener {
 
 			do {
 				RandomPos2 = (int) (Math.random() * (6 - 0 + 1));
-			} while (ActiveGangster1 == RandomPos3 ||  ActiveGangster3 == RandomPos3);
+			} while (ActiveGangster1 == RandomPos2 ||  ActiveGangster3 == RandomPos2);
 
 			ActiveGangster2 = (RandomPos2);
 
@@ -223,7 +223,7 @@ public class DrawImages extends JPanel implements ActionListener {
 		comp.drawImage(BottomBar, 0, 920, this);
 		comp.drawImage(Ammo[AmmoRemaining], 1750, 908, 140, 140, this);
 		comp.drawImage(Health[(HealthRemaining) - 1], 5, 860, 500, 222, this);
-		comp.drawImage(Headshot, HeadshotWidth, 5, this);
+		comp.drawImage(Headshot, HeadshotWidth, 930, this);
 		comp.drawImage(Gangster[0], GangsterWidth[0], GangsterHeight[0], GangsterImgSize[0], GangsterImgSize[0], this);
 		comp.drawImage(Gangster[1], GangsterWidth[1], GangsterHeight[1], GangsterImgSize[1], GangsterImgSize[1], this);
 		comp.drawImage(Gangster[2], GangsterWidth[2], GangsterHeight[2], GangsterImgSize[2], GangsterImgSize[2], this);

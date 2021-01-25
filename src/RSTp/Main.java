@@ -17,13 +17,11 @@ public class Main extends JPanel implements MouseListener {
 
 	static Cursor cross_cursor;
 	static int bullets = 6;
-	
-	static int mouseX=0;
-	static int mouseY=0;
-	
+
+	static int mouseX = 0;
+	static int mouseY = 0;
+
 	static DrawImages draw = new DrawImages(bullets);
-	
-	
 
 	public final static JFrame frame = new JFrame("RST");
 
@@ -56,8 +54,6 @@ public class Main extends JPanel implements MouseListener {
 
 		frame.addMouseListener(new MouseAdapter() {
 
-			
-			
 			public void mouseClicked(MouseEvent e) {
 				draw.HeadshotWidth = -1000;
 				if (bullets == 6) {
@@ -66,19 +62,19 @@ public class Main extends JPanel implements MouseListener {
 				// DrawImages.DrawImages(bullets);
 				int delay = 1000; // milliseconds
 				if (bullets >= 1) {
-					if (draw.AmmoRemaining == bullets) {
-						mouseX = e.getX();
-						mouseY = e.getY();
-						bullets--;
-						draw.wasShot(); 
-						frame.repaint();
-						try {
-							playGunSound();
-						} catch (UnsupportedAudioFileException | IOException | LineUnavailableException e1) {
-							// TODO Auto-generated catch block
-							e1.printStackTrace();
-						}
+					draw.AmmoRemaining = bullets;
+					mouseX = e.getX();
+					mouseY = e.getY();
+					bullets--;
+					draw.wasShot();
+					frame.repaint();
+					try {
+						playGunSound();
+					} catch (UnsupportedAudioFileException | IOException | LineUnavailableException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
 					}
+
 				}
 
 				draw.shoot();
