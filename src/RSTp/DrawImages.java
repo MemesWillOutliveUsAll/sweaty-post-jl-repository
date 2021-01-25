@@ -158,14 +158,46 @@ public class DrawImages extends JPanel implements ActionListener {
 		HeadshotWidth = 930;
 		
 	}
+	
+	public void SwitchMap()
+	{
+		Saloon=;
+		int[][] PossiblePos = { { 750, 530, 288, 161, 70, 39, 107 }, { 1000, 547, 150, 84, 36, 15, 56 },
+				{ 1200, 547, 150, 84, 36, 15, 56 }, { 850, 0, 288, 161, 70, 39, 107 }, { 1500, 0, 288, 161, 70, 39, 107 },
+				{ 300, 500, 288, 161, 70, 39, 107 }, { 1500, 500, 288, 161, 70, 39, 107 } };
+		
+		GangsterWidth[0] = PossiblePos[1][0];
+		GangsterHeight[0] = PossiblePos[1][1];
+		GangsterImgSize[0] = PossiblePos[1][2];
+		
+		GangsterWidth[1] = PossiblePos[2][0];
+		GangsterHeight[1] = PossiblePos[2][1];
+		GangsterImgSize[1] = PossiblePos[2][2];
+		
+		GangsterWidth[2] = PossiblePos[3][0];
+		GangsterHeight[2] = PossiblePos[3][1];
+		GangsterImgSize[2] = PossiblePos[3][2];
+		
+	}
 
+	int x=0;
+	
 	public void GangsterShot(int whoGotShot) {
 
 		// After Gangster got shot picks a random gangster to respawn
 		if (whoGotShot == 0) {
 
+			
 			TotalGangstersShot++;
 
+			if(TotalGangstersShot==30)
+			{
+				if(x==0)
+				{
+				    //SwitchMap();
+				}
+				x++;
+			}
 			// Placing new guy back
 			do {
 				RandomPos1 = (int) (Math.random() * (6 - 0 + 1));
