@@ -59,6 +59,7 @@ public class Main extends JPanel implements MouseListener {
 			
 			
 			public void mouseClicked(MouseEvent e) {
+				draw.HeadshotWidth = -1000;
 				if (bullets == 6) {
 					stopMultipleReloads = 0;
 				}

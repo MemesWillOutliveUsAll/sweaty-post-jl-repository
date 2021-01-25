@@ -7,7 +7,7 @@ import javax.swing.*;
 
 public class DrawImages extends JPanel implements ActionListener {
 
-	Image BottomBar, Saloon;
+	Image BottomBar, Saloon, Headshot;
 	Image[] Ammo = new Image[7];
 	Image[] Health = new Image[11];
 	Image[] Gangster = new Image[5];
@@ -34,6 +34,7 @@ public class DrawImages extends JPanel implements ActionListener {
 		Toolkit kit = Toolkit.getDefaultToolkit();
 		BottomBar = kit.getImage("Images/BottomBar.png");
 		Saloon = kit.getImage("Images/saloon.jpg");
+		Headshot = kit.getImage("Images/Headshot.png");
 		for (int i = 0; i < 7; i++) {
 			Ammo[i] = kit.getImage("Images/Ammo " + (i) + ".png");
 		}
@@ -89,57 +90,72 @@ public class DrawImages extends JPanel implements ActionListener {
 			{ 1200, 547, 150, 84, 36, 15, 56 }, { 850, 0, 288, 161, 70, 39, 107 }, { 1500, 0, 288, 161, 70, 39, 107 },
 			{ 300, 500, 288, 161, 70, 39, 107 }, { 1500, 500, 288, 161, 70, 39, 107 } };
 
+	int TotalPoints = 0;
 
 	public void wasShot() {
 
 		for (int i = 0; i < 7; i++) {
 
-			if (mouseX > PossiblePos[i][0]+PossiblePos[i][6]) {
-				if (mouseX < PossiblePos[i][0] + PossiblePos[i][6]+PossiblePos[i][4]) {
-					if (mouseY < PossiblePos[i][1] + PossiblePos[i][2]-PossiblePos[i][5]) {
-					
-						
-				
+			if (mouseX > PossiblePos[i][0] + PossiblePos[i][6]) {
+				if (mouseX < PossiblePos[i][0] + PossiblePos[i][6] + PossiblePos[i][4]) {
+					if (mouseY < PossiblePos[i][1] + PossiblePos[i][3]) {
+						if (mouseY > PossiblePos[i][1] + PossiblePos[i][5] + PossiblePos[i][5]) {
+
 							if (PossiblePos[i][0] == GangsterWidth[0]) {
-								System.out.println("Headshot");
+								TotalPoints += 150;
 								GangsterShot(0);
+								Headshot();
 							}
 							if (PossiblePos[i][0] == GangsterWidth[1]) {
-								System.out.println("Headshot");
+								TotalPoints += 150;
 								GangsterShot(1);
+								Headshot();
 							}
 							if (PossiblePos[i][0] == GangsterWidth[2]) {
-								System.out.println("Headshot");
+								TotalPoints += 150;
 								GangsterShot(2);
+								Headshot();
 							}
-						
+						}
 					}
 				}
 			}
-			
+
 			if (mouseX > PossiblePos[i][0]) {
 				if (mouseX < PossiblePos[i][0] + PossiblePos[i][2]) {
 					if (mouseY > PossiblePos[i][1] + PossiblePos[i][3]) {
 						if (mouseY < PossiblePos[i][1] + PossiblePos[i][2]) {
 
 							if (PossiblePos[i][0] == GangsterWidth[0]) {
+								TotalPoints += 50;
 								GangsterShot(0);
+
 							}
 							if (PossiblePos[i][0] == GangsterWidth[1]) {
+								TotalPoints += 50;
 								GangsterShot(1);
+
 							}
 							if (PossiblePos[i][0] == GangsterWidth[2]) {
+								TotalPoints += 50;
 								GangsterShot(2);
+
 							}
-							
 
 						}
+
 					}
 				}
 			}
-			
-			
+
 		}
+
+	}
+
+	int HeadshotWidth = -1000;
+
+	public void Headshot() {
+		HeadshotWidth = 800;
 
 	}
 
@@ -153,13 +169,14 @@ public class DrawImages extends JPanel implements ActionListener {
 			// Placing new guy back
 			do {
 				RandomPos1 = (int) (Math.random() * (6 - 0 + 1));
-			} while (ActiveGangster2 == RandomPos1 || ActiveGangster3 == RandomPos1);
+			} while ( ActiveGangster2 == RandomPos3 || ActiveGangster3 == RandomPos3);
 
 			ActiveGangster1 = (RandomPos1);
 
 			GangsterWidth[0] = PossiblePos[(RandomPos1)][0];
 			GangsterHeight[0] = PossiblePos[(RandomPos1)][1];
 			GangsterImgSize[0] = PossiblePos[(RandomPos1)][2];
+
 			repaint();
 
 		} else if (whoGotShot == 1) {
@@ -169,7 +186,7 @@ public class DrawImages extends JPanel implements ActionListener {
 
 			do {
 				RandomPos2 = (int) (Math.random() * (6 - 0 + 1));
-			} while (ActiveGangster1 == RandomPos2 || ActiveGangster3 == RandomPos2);
+			} while (ActiveGangster1 == RandomPos3 ||  ActiveGangster3 == RandomPos3);
 
 			ActiveGangster2 = (RandomPos2);
 
@@ -186,7 +203,7 @@ public class DrawImages extends JPanel implements ActionListener {
 
 			do {
 				RandomPos3 = (int) (Math.random() * (6 - 0 + 1));
-			} while (ActiveGangster1 == RandomPos3 || ActiveGangster2 == RandomPos3);
+			} while (ActiveGangster1 == RandomPos3 || ActiveGangster2 == RandomPos3 );
 
 			ActiveGangster3 = (RandomPos3);
 
@@ -206,6 +223,7 @@ public class DrawImages extends JPanel implements ActionListener {
 		comp.drawImage(BottomBar, 0, 920, this);
 		comp.drawImage(Ammo[AmmoRemaining], 1750, 908, 140, 140, this);
 		comp.drawImage(Health[(HealthRemaining) - 1], 5, 860, 500, 222, this);
+		comp.drawImage(Headshot, HeadshotWidth, 5, this);
 		comp.drawImage(Gangster[0], GangsterWidth[0], GangsterHeight[0], GangsterImgSize[0], GangsterImgSize[0], this);
 		comp.drawImage(Gangster[1], GangsterWidth[1], GangsterHeight[1], GangsterImgSize[1], GangsterImgSize[1], this);
 		comp.drawImage(Gangster[2], GangsterWidth[2], GangsterHeight[2], GangsterImgSize[2], GangsterImgSize[2], this);
